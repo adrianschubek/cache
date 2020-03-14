@@ -23,8 +23,8 @@ class Cache
         $this->driver->set($key, $value);
     }
 
-    public function get(string $key, $value)
+    public function get(string $key)
     {
-        $this->driver->get($key, $value);
+        $this->driver->get($key);
     }
 }

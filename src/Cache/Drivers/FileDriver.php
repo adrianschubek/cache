@@ -7,23 +7,30 @@
 namespace adrianschubek\Cache\Drivers;
 
 
+use adrianschubek\Cache\Util;
+
 class FileDriver implements CacheDriverInterface
 {
     private FileDriverOptions $options;
 
-    public function __construct(?FileDriverOptions $options)
+    public function __construct(FileDriverOptions $options)
     {
-        $this->options = $options ?? new FileDriverOptions();
+        $this->options = $options;
     }
 
     public function set(string $key, $value)
     {
-
+        Util::putFile(
+            $this->options->getCacheFolder() . "/" . hash("sha256", $key) . "/data.txt",
+            serialize($value)
+        );
     }
 
-    public function get(string $key, $value)
+    public function get(string $key)
     {
-        // TODO: Implement get() method.
+        return unserialize(
+            Util::getFile($this->options->getCacheFolder() . "/" . hash("sha256", $key) . "/data.txt")
+        );
     }
 
     public function isExpired(string $key): bool
